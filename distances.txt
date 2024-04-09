@@ -1,4 +1,4 @@
-
+%List of all possible routes with fact route(X,Y,Distance/Cost(in Km))
 route(aberaeron, aberystwyth, 27). 
 route(aberystwyth, aberaeron, 27). 
 
@@ -147,34 +147,63 @@ route(oswestry, wrecsam, 24).
 route(wrecsam, oswestry, 24).
 
 
-path(X,X,Distance,H) :- 
+path(X,X,Distance,[X],H) :- %Base case for any station to the same station. path(StationX, StationX, Distance, [StationName/stop], Number of times its moved).
     H >= 0, Distance is 0.
+%Not necessarily needed but good to cover in case of any cases where the station is going to the same station
 
-path(X,Y,Distance,H) :- 
-    H > 1, route(X,Z,Distance1),
-    H1 is H-1, 
-    path(Z,Y,Distance2,H1), 
-    Distance is Distance1+Distance2. %Finds any path
 
-findPath(X,Y,Distance,H) :- %Base case if theres a single path between StationX and StationY
-    path(X,Y,Distance,H).
-
-findPath(X,Y,Distance,H) :- 
-    H1 is H+1,
-    findPath(X,Y,Distance,H1).
-
-pathBound(X,Y,Distance,L) :-
-    route(X,Y,D),
-    D < L,
-    Distance is D.
-
-pathBound(X,Y,Distance,L) :- 
-    L >=0,
+%the main path method. Covers any normal destination path(StationX, StationY, Distance, [StationX|StationName/stops], Number of times hopped between stations).
+path(X,Y,Distance,[X|Stops],H) :- 
+    %checks to make sure the remaining number of stops is more than 1.
+    H > 1,
+    %if so it creates a route with a station X and then Station Z a third station differing from station Y to calc the distance using a new varaible distance1
     route(X,Z,Distance1),
-    L1 is L - Distance1,
-    pathBound(Z,Y,Distance2,L1),
-    Distance is Distance1 + Distance2.
+    %H1 is now the number of stops allowed -1.
+    H1 is H-1, 
+    %calls itself again but with station Z instead of Station X, distance2 instead of distance1 and H1 instead of H. This allows it to search through all possible solutions.
+    path(Z,Y,Distance2,Stops,H1), 
+    %Calaculates the total Distance cost using Distance1 and Distance2 Distance1 is X-Z and Distance2 is Z to Y.
+    Distance is Distance1+Distance2.
 
-distance(X,Y,Distance) :-
-    findPath(X,Y,Distance,0),
-    \+ pathBound(X,Y,_,Distance).
+findPath(X,Y,Distance,Stops,H) :- %Base case if theres a single path between StationX and StationY findPath(StationX, StationY, Distance, Stops, Number of hops)
+    path(X,Y,Distance,Stops,H). %calls path once as there would be a single path between X and Y.
+
+%Recursive find path call. 
+findPath(X,Y,Distance,Stops,H) :- 
+    H1 is H+1,
+    %Calls itself with H1 which is H+1, allowing there to be one more stop to find the path between X and Y. When would then start the process to recursively call the path.
+    findPath(X,Y,Distance,Stops,H1).
+
+%Base case for a single stop. Checks if the path distance is bounded within a certain limit set by L (Length). 
+pathBound(X,Y,Distance,Stops,L) :-
+    %checks if there is a direct route.
+    route(X,Y,D),
+    %if so checks if D < L. 
+    D < L,
+    %if that passes then distance is set to D.
+    Distance is D,
+    %sets the stops to X and Y station
+    Stops = [X,Y].
+
+%Recurisve version of pathBound call.
+pathBound(X,Y,Distance,Stops,L) :- 
+    %checks to make sure L isnt negative. if it is. it means that the current branch is exceding the maximum allowed distance
+    L >=0,
+    %calls route with station X and Z, similar to the recursive version of Path.
+    route(X,Z,Distance1),
+    %L1 becomes L - the distance between station X and Z
+    L1 is L - Distance1,
+    %calling itself again but with station Z and Y, and then Distane2, Stops2 and L1
+    pathBound(Z,Y,Distance2,Stops2,L1),
+    %adds up the total distance
+    Distance is Distance1 + Distance2,
+    %Sets X and accumlated stops from station Z via Stops2.
+    Stops = [X|Stops2].
+
+%Main rule/predicate. Finds the stops and stations between X and Y
+distance(X,Y,Distance, Stops) :-
+    %calls findPath to find the path between X and Y, adding stops in between
+    findPath(X,Y,Distance,Stops,0),
+    %checks if the path found is bound by the limit set in PathBound. 
+    \+ pathBound(X,Y,_,_,Distance).
+
