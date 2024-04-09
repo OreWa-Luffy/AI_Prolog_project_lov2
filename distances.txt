@@ -1,89 +1,180 @@
-station(aberystwyth). %station(nameOfStation)
-station(aberaeron).
-station(aberteifi).
-station(abergavenny).
-station(bala).
-station(bangor).
-station(brecon).
-station(builth).
-station(built).
-station(carmarthen).
-station(chester).
-station(corwen).
-station(dolgellau).
-station(fishguard).
-station(glynneath).
-station(hay).
-station(holyhead).
-station(lampeter).
-station(llandrindod).
-station(llandudno).
-station(llanidloes).
-station(llandovery).
-station(machynlleth).
-station(merthyrtudful).
-station(newcastleemlyn).
-station(newtown).
-station(oswestry).
-station(porthmadog).
-station(presteigne).
-station(rhyl).
-station(rhayader).
-station(wrecsam).
-station(welshpool).
+
+route(aberaeron, aberystwyth, 27). 
+route(aberystwyth, aberaeron, 27). 
+
+route(aberaeron, aberteifi, 35). 
+route(aberteifi, aberaeron, 35). 
+
+route(aberaeron, lampeter, 22). 
+route(lampeter, aberaeron, 22). 
+
+route(abergavenny, brecon, 42). 
+route(brecon, abergavenny, 42). 
+
+route(abergavenny, merthyr_tudful, 35). 
+route(merthyr_tudful, abergavenny, 35). 
+
+route(aberteifi, fishguard, 33). 
+route(fishguard, aberteifi, 33). 
+
+route(aberteifi, newcastle_emlyn, 17). 
+route(newcastle_emlyn, aberteifi, 17). 
+
+route(aberystwyth, machynlleth, 30). 
+route(machynlleth, aberystwyth, 30). 
+
+route(aberystwyth, rhayader, 46). 
+route(rhayader, aberystwyth, 46). 
+
+route(bala, corwen, 15). 
+route(corwen, bala, 15). 
+
+route(bala, dolgellau, 25). 
+route(dolgellau, bala, 25). 
+
+route(bala, llandudno, 53). 
+route(llandudno, bala, 53). 
+
+route(bangor, holyhead, 40). 
+route(holyhead, bangor, 40). 
+
+route(bangor, llandudno, 35). 
+route(llandudno, bangor, 35). 
+
+route(bangor, porthmadog, 45). 
+route(porthmadog, bangor, 45). 
+
+route(brecon, builth, 26). 
+route(builth, brecon, 26). 
+
+route(brecon, hay, 25). 
+route(hay, brecon, 25). 
+
+route(brecon, llandovery, 28). 
+route(llandovery, brecon, 28). 
+
+route(brecon, merthyr_tudful, 30). 
+route(merthyr_tudful, brecon, 30). 
+
+route(brynaman, carmarthen, 35). 
+route(carmarthen, brynaman, 35). 
+
+route(brynaman, glynneath, 30). 
+route(glynneath, brynaman, 30). 
+
+route(builth, hay, 27). 
+route(hay, builth, 27). 
+
+route(builth, llandovery, 28). 
+route(llandovery, builth, 28). 
+
+route(built, llandrindod, 16). 
+route(llandrindod, built, 16). 
+
+route(builth, rhayader, 18). 
+route(rhayader, builth, 18). 
+
+route(carmarthen, newcastle_emlyn, 28). 
+route(newcastle_emlyn, carmarthen, 28). 
+
+route(chester, corwen, 44). 
+route(corwen, chester, 44). 
+
+route(chester, rhyl, 46). 
+route(rhyl, chester, 46). 
+
+route(chester, wrecsam, 16). 
+route(wrecsam, chester, 16). 
+
+route(corwen, oswestry, 33). 
+route(oswestry, corwen, 33). 
+
+route(dolgellau, machynlleth, 32). 
+route(machynlleth, dolgellau, 32). 
+
+route(dolgellau, porthmadog, 31). 
+route(porthmadog, dolgellau, 31). 
+
+route(fishguard, st_davids, 27). 
+route(st_davids, fishguard, 27). 
+
+route(glynneath, merthyr_tudful, 22). 
+route(merthyr_tudful, glynneath, 22). 
+
+route(hay, presteigne, 27). 
+route(presteigne, hay, 27). 
+
+route(lampeter, llandovery, 33). 
+route(llandovery, lampeter, 33). 
+
+route(lampeter, newcastle_emlyn, 37). 
+route(newcastle_emlyn, lampeter, 37). 
+
+route(llandrindod, presteigne, 23). 
+route(presteigne, llandrindod, 23). 
+
+route(llandrindod, rhayader, 17). 
+route(rhayader, llandrindod, 17). 
+
+route(llandrindod, newtown, 32). 
+route(newtown, llandrindod, 32). 
+
+route(llandudno, rhyl, 27). 
+route(rhyl, llandudno, 27). 
+
+route(llanidloes, newtown, 18). 
+route(newtown, llanidloes, 18). 
+
+route(llanidloes, rhayader, 20). 
+route(rhayader, llanidloes, 20). 
+
+route(knighton, welshpool, 35). 
+route(welshpool, knighton, 35). 
+
+route(knighton, presteigne, 12). 
+route(presteigne, knighton, 12). 
+
+route(machynlleth, newtown, 45). 
+route(newtown, machynlleth, 45). 
+
+route(newtown, welshpool, 25). 
+route(welshpool, newtown, 25). 
+
+route(oswestry, welshpool, 29). 
+route(welshpool, oswestry, 29). 
+
+route(oswestry, wrecsam, 24). 
+route(wrecsam, oswestry, 24).
 
 
+path(X,X,Distance,H) :- 
+    H >= 0, Distance is 0.
 
+path(X,Y,Distance,H) :- 
+    H > 1, route(X,Z,Distance1),
+    H1 is H-1, 
+    path(Z,Y,Distance2,H1), 
+    Distance is Distance1+Distance2. %Finds any path
 
-route(aberaeron, aberystwyth, 27). %route(Start,End,Cost)
-route(aberaeron, aberteifi, 35).
-route(aberaeron, lampeter, 22).
-route(abergavenny, brecon, 42).
-route(abergavenny, merthyr_tudful, 35).
-route(aberteifi, fishguard, 33).
-route(aberteifi, newcastle_emlyn, 17).
-route(aberystwyth, machynlleth, 30).
-route(aberystwyth, rhayader, 46).
-route(bala, corwen, 15).
-route(bala, dolgellau, 25).
-route(bala, llandudno, 53).
-route(bangor, holyhead, 40).
-route(bangor, llandudno, 35).
-route(bangor, porthmadog, 45).
-route(brecon, builth, 26).
-route(brecon, hay, 25).
-route(brecon, llandovery, 28).
-route(brecon, merthyr_tudful, 30).
-route(brynaman, carmarthen, 35).
-route(brynaman, glynneath, 30).
-route(builth, hay, 27).
-route(builth, llandovery, 28).
-route(built, llandrindod, 16).
-route(builth, rhayader, 18).
-route(carmarthen, newcastle_emlyn, 28).
-route(chester, corwen, 44).
-route(chester, rhyl, 46).
-route(chester, wrecsam, 16).
-route(corwen, oswestry, 33).
-route(dolgellau, machynlleth, 32).
-route(dolgellau, porthmadog, 31).
-route(fishguard, st_davids, 27).
-route(glynneath, merthyr_tudful, 22).
-route(hay, presteigne, 27).
-route(lampeter, llandovery, 33).
-route(lampeter, newcastle_emlyn, 37).
-route(llandrindod, presteigne, 23).
-route(llandrindod, rhayader, 17).
-route(llandrindod, newtown, 32).
-route(llandudno, rhyl, 27).
-route(llanidloes, newtown, 18).
-route(llanidloes, rhayader, 20).
-route(knighton, welshpool, 35).
-route(knighton, presteigne, 12).
-route(machynlleth, newtown, 45).
-route(newtown, welshpool, 25).
-route(oswestry, welshpool, 29).
-route(oswestry, wrecsam, 24).
+findPath(X,Y,Distance,H) :- %Base case if theres a single path between StationX and StationY
+    path(X,Y,Distance,H).
 
+findPath(X,Y,Distance,H) :- 
+    H1 is H+1,
+    findPath(X,Y,Distance,H1).
 
-path(X,Y,N,H) :- H >= 0, X is Y, N is 0.
+pathBound(X,Y,Distance,L) :-
+    route(X,Y,D),
+    D < L,
+    Distance is D.
+
+pathBound(X,Y,Distance,L) :- 
+    L >=0,
+    route(X,Z,Distance1),
+    L1 is L - Distance1,
+    pathBound(Z,Y,Distance2,L1),
+    Distance is Distance1 + Distance2.
+
+distance(X,Y,Distance) :-
+    findPath(X,Y,Distance,0),
+    \+ pathBound(X,Y,_,Distance).
